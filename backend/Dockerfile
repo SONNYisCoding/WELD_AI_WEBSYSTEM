@@ -22,5 +22,5 @@ COPY backend/ .
 
 EXPOSE 5000
 
-#CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:$PORT", "--workers", "1", "--timeout", "300", "--preload", "False"]
-CMD ["python", "-u", "app.py"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:$PORT", "--workers", "1", "--timeout", "300", "--preload", "False"]
+#CMD ["python", "-u", "app.py"]
