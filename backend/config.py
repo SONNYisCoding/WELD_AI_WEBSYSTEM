@@ -11,9 +11,3 @@ OUTPUT_DIR = os.path.join(STORAGE_DIR, "outputs")
 
 # Flask
 MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB
-
-# ============================
-# REDIS (NEW)
-# ============================
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-USE_QUEUE = os.getenv("USE_QUEUE", "false").lower() == "true"

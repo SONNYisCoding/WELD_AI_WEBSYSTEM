@@ -3,25 +3,15 @@ import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
-from config import UPLOAD_DIR, OUTPUT_DIR, MAX_CONTENT_LENGTH, USE_QUEUE, REDIS_URL
+from config import UPLOAD_DIR, OUTPUT_DIR, MAX_CONTENT_LENGTH
 from pipeline.run_yolo_detect import detect_roi
 from pipeline.run_unet_or_fallback import segment_roi
 from pipeline.skeleton import extract_track
-from rq import Queue
-from redis import Redis
-from worker import run_pipeline
+
 
 app = Flask(__name__)
 CORS(app)
 app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
-
-if USE_QUEUE:
-    from rq import Queue
-    from redis import Redis
-    from worker import run_pipeline
-
-    redis_conn = Redis.from_url(REDIS_URL)
-    queue = Queue("ai-jobs", connection=redis_conn)
 
 
 @app.route("/api/process", methods=["POST"])
@@ -35,17 +25,9 @@ def process():
     input_path = os.path.join(UPLOAD_DIR, f"{job_id}.jpg")
     f.save(input_path)
 
-    if USE_QUEUE:
-        queue.enqueue(
-            run_pipeline,
-            input_path,
-            job_id,
-            job_timeout=300
-        )
-    else:
-        roi = detect_roi(input_path, job_id)
-        mask = segment_roi(roi, job_id)
-        extract_track(mask, job_id)
+    roi = detect_roi(input_path, job_id)
+    mask = segment_roi(roi, job_id)
+    extract_track(mask, job_id)
 
 
     return jsonify({

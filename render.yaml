@@ -53,14 +53,11 @@ services:
     name: weld-ai-worker
 
     env: docker
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: backend/Dockerfile.worker
 
     plan: standard
     region: singapore
 
-    # Lệnh chạy worker (KHÔNG chạy Flask)
-    startCommand: >
-      rq worker ai-jobs
 
     envVars:
       - key: REDIS_URL
@@ -82,3 +79,7 @@ services:
     name: weld-redis
 
     plan: free
+
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: allow internal services
