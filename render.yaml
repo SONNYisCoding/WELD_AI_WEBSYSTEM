@@ -1,0 +1,84 @@
+# =========================================================
+# RENDER CONFIGURATION
+# =========================================================
+# File này định nghĩa TOÀN BỘ hệ thống backend trên Render
+# Bao gồm:
+# - Flask Web Service
+# - AI Worker
+# - Redis Queue
+# =========================================================
+
+services:
+
+  # -------------------------------------------------------
+  # 1. FLASK WEB SERVICE (API)
+  # -------------------------------------------------------
+  - type: web
+    name: weld-backend-api
+
+    # Chạy bằng Dockerfile backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+
+    # Gói dịch vụ (>= 1GB RAM là bắt buộc cho AI)
+    plan: standard
+
+    # Region gần VN (nếu có)
+    region: singapore
+
+    # Port Gunicorn bind
+    envVars:
+      - key: PORT
+        value: 5000
+
+      # Redis connection string
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: weld-redis
+          property: connectionString
+
+      # Flask environment
+      - key: FLASK_ENV
+        value: production
+
+    # Auto deploy khi push main
+    autoDeploy: true
+
+
+  # -------------------------------------------------------
+  # 2. AI WORKER SERVICE (NO HTTP)
+  # -------------------------------------------------------
+  - type: worker
+    name: weld-ai-worker
+
+    env: docker
+    dockerfilePath: backend/Dockerfile
+
+    plan: standard
+    region: singapore
+
+    # Lệnh chạy worker (KHÔNG chạy Flask)
+    startCommand: >
+      rq worker ai-jobs
+
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: weld-redis
+          property: connectionString
+
+      - key: FLASK_ENV
+        value: production
+
+    autoDeploy: true
+
+
+  # -------------------------------------------------------
+  # 3. REDIS SERVICE
+  # -------------------------------------------------------
+  - type: redis
+    name: weld-redis
+
+    plan: free
