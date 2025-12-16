@@ -138,7 +138,7 @@ const ReportContent = () => {
                 variant="contained" 
                 startIcon={<GitHubIcon />} 
                 component="a"
-                href="https://github.com/SONNYisCoding/WELD_AI_WEBSYSTEM"
+                href="https://github.com/SONNYisCoding/WEL_AI_WEBSYSTEM"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ borderRadius: 50, px: 3, bgcolor: '#212121' }}
