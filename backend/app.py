@@ -13,6 +13,10 @@ app = Flask(__name__)
 CORS(app)
 app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
 
+# (Tạo thư mục uploads và ouputs nếu chưa tồn tại khi app start)
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 
 @app.route("/api/process", methods=["POST"])
 def process():
@@ -22,6 +26,9 @@ def process():
     f = request.files["file"]
     job_id = uuid.uuid4().hex
 
+    # đảm bảo thư mục upload tồn tại (QUAN TRỌNG cho Render)
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    
     input_path = os.path.join(UPLOAD_DIR, f"{job_id}.jpg")
     f.save(input_path)
 
