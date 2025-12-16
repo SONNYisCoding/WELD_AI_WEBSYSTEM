@@ -13,13 +13,13 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import DescriptionIcon from '@mui/icons-material/Description';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import BusinessIcon from '@mui/icons-material/Business';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';       // Input
-import CropFreeIcon from '@mui/icons-material/CropFree';         // YOLO
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';   // U-Net
-import TimelineIcon from '@mui/icons-material/Timeline';         // Skeleton
-import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing'; // Output
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'; // Mũi tên ngang
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; // Mũi tên dọc
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import CropFreeIcon from '@mui/icons-material/CropFree';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const AUTHORS = [
   { name: "Nguyen Minh Triet", role: "Team Leader" },
@@ -42,7 +42,7 @@ const PIPELINE_STEPS = [
     tech: "Mech-Eye 3D", 
     desc: "RGB + Point Cloud", 
     icon: <CameraAltIcon fontSize="large" />, 
-    color: "#607D8B" // Xám xanh (Raw data)
+    color: "#607D8B"
   },
   { 
     id: 2, 
@@ -50,7 +50,7 @@ const PIPELINE_STEPS = [
     tech: "YOLOv8", 
     desc: "Crop Weld Region", 
     icon: <CropFreeIcon fontSize="large" />, 
-    color: "#E65100" // Cam (Detection/Warning)
+    color: "#E65100"
   },
   { 
     id: 3, 
@@ -58,7 +58,7 @@ const PIPELINE_STEPS = [
     tech: "U-Net", 
     desc: "Pixel-level Mask", 
     icon: <AutoFixHighIcon fontSize="large" />, 
-    color: "#2E7D32" // Xanh lá (Processing/Filtering)
+    color: "#2E7D32"
   },
   { 
     id: 4, 
@@ -66,7 +66,7 @@ const PIPELINE_STEPS = [
     tech: "Morphology", 
     desc: "Centerline Extract", 
     icon: <TimelineIcon fontSize="large" />, 
-    color: "#1565C0" // Xanh dương (Analysis)
+    color: "#1565C0"
   },
   { 
     id: 5, 
@@ -74,7 +74,7 @@ const PIPELINE_STEPS = [
     tech: "Robot Path", 
     desc: "(u, v) Coordinates", 
     icon: <PrecisionManufacturingIcon fontSize="large" />, 
-    color: "#D81B60" // Hồng đậm (Final Action)
+    color: "#D81B60"
   }
 ];
 
@@ -122,25 +122,23 @@ const ReportContent = () => {
 
             <Box sx={{ mt: 5, display: 'flex', justifyContent: 'center', gap: 2 }}>
               
-              {/* NÚT 1: REPORT PDF */}
               <Button 
                 variant="contained" 
                 startIcon={<DescriptionIcon />} 
-                component="a"                 // <-- Biến thành thẻ <a>
-                href="/Report.pdf"            // <-- Đường dẫn tới file trong thư mục public
-                target="_blank"               // <-- Mở tab mới
-                rel="noopener noreferrer"     // <-- Bảo mật khi mở tab mới
+                component="a"
+                href="/Report.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 sx={{ borderRadius: 50, px: 3, bgcolor: '#212121' }}
               >
                 Report PDF
               </Button>
 
-              {/* NÚT 2: SOURCE CODE */}
               <Button 
                 variant="contained" 
                 startIcon={<GitHubIcon />} 
-                component="a"                 // <-- Biến thành thẻ <a>
-                href="https://github.com/SONNYisCoding/weld-system-web" // <-- Thay link GitHub thật của bạn vào đây
+                component="a"
+                href="https://github.com/SONNYisCoding/weld-system-web"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ borderRadius: 50, px: 3, bgcolor: '#212121' }}
@@ -148,12 +146,11 @@ const ReportContent = () => {
                 Source Code
               </Button>
 
-              {/* NÚT 3: DEMO VIDEO (Tương tự nếu bạn có link YouTube) */}
               <Button 
                 variant="contained" 
                 startIcon={<YouTubeIcon />} 
                 component="a"
-                href="https://youtu.be/hQZ_lmSKzrs" // <-- Thay link video của bạn
+                href="https://youtu.be/hQZ_lmSKzrs"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{ borderRadius: 50, px: 3, bgcolor: '#212121' }}
@@ -206,7 +203,7 @@ const ReportContent = () => {
             </Box>
           </Box>
 
-          <Box mb={6} sx={{ maxWidth: '1200px', mx: 'auto' }}> {/* Mở rộng width lên 1200px cho sơ đồ ngang */}
+          <Box mb={6} sx={{ maxWidth: '1200px', mx: 'auto' }}>
             <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
               System Architecture (Pipeline)
             </Typography>
@@ -214,11 +211,9 @@ const ReportContent = () => {
               The processing system is divided into 5 main stages, operating sequentially to ensure the highest accuracy in an industrial environment:
             </Typography>          
             
-            {/* --- BẮT ĐẦU SƠ ĐỒ PIPELINE --- */}
             <Grid container alignItems="center" justifyContent="center" spacing={2}>
               {PIPELINE_STEPS.map((step, index) => (
                 <React.Fragment key={step.id}>
-                  {/* Khối chức năng (Card) */}
                   <Grid item xs={12} sm={6} md={2}>
                     <Paper 
                       elevation={3}
@@ -227,16 +222,15 @@ const ReportContent = () => {
                         textAlign: 'center', 
                         height: '100%',
                         borderRadius: 3,
-                        borderTop: `4px solid ${step.color}`, // Viền màu trên đầu
+                        borderTop: `4px solid ${step.color}`,
                         transition: 'transform 0.3s',
                         '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 }
                       }}
                     >
-                      {/* Icon tròn */}
                       <Box 
                         sx={{ 
                           width: 60, height: 60, borderRadius: '50%', 
-                          bgcolor: `${step.color}15`, // Màu nền nhạt (15% opacity)
+                          bgcolor: `${step.color}15`,
                           color: step.color,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           mx: 'auto', mb: 2
@@ -245,12 +239,10 @@ const ReportContent = () => {
                         {step.icon}
                       </Box>
                       
-                      {/* Tên bước */}
                       <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                         {step.title}
                       </Typography>
                       
-                      {/* Công nghệ sử dụng (Chip) */}
                       <Chip 
                         label={step.tech} 
                         size="small" 
@@ -263,17 +255,14 @@ const ReportContent = () => {
                         }} 
                       />
                       
-                      {/* Mô tả ngắn */}
                       <Typography variant="caption" display="block" color="text.secondary" sx={{ lineHeight: 1.2 }}>
                         {step.desc}
                       </Typography>
                     </Paper>
                   </Grid>
 
-                  {/* Mũi tên nối (Chỉ hiện nếu không phải bước cuối cùng) */}
                   {index < PIPELINE_STEPS.length - 1 && (
                     <Grid item xs={12} md="auto" sx={{ display: 'flex', justifyContent: 'center' }}>
-                       {/* Mũi tên xoay chiều tùy màn hình: Ngang trên PC, Dọc trên Mobile */}
                        <Box sx={{ color: '#bdbdbd', display: { xs: 'none', md: 'block' } }}>
                           <ArrowForwardIcon />
                        </Box>
@@ -285,10 +274,9 @@ const ReportContent = () => {
                 </React.Fragment>
               ))}
             </Grid>
-            {/* --- KẾT THÚC SƠ ĐỒ PIPELINE --- */}
 
             <Box mt={6} sx={{ maxWidth: '900px', mx: 'auto' }}>
-                <Grid container spacing={4}> {/* <-- Đã thêm Container bao quanh */}
+                <Grid container spacing={4}>
                     <Grid item xs={12}>
                         <Typography variant="body1">
                             1. <strong>Input Data:</strong> Using Mech-Eye Pro M Enhanced for RGB & Point Cloud.<br/>
@@ -313,7 +301,6 @@ const ReportContent = () => {
             <Timeline position="alternate"> 
               {TIMELINE_DATA.map((item, index) => (
                 <TimelineItem key={index}>
-                  {/* Cột hiển thị Thời gian (Trái hoặc Phải tùy vị trí) */}
                   <TimelineOppositeContent
                     sx={{ m: 'auto 0' }}
                     align="right"
@@ -325,7 +312,6 @@ const ReportContent = () => {
                     </Typography>
                   </TimelineOppositeContent>
                   
-                  {/* Trục giữa: Dấu chấm và đường kẻ */}
                   <TimelineSeparator>
                     <TimelineConnector />
                     <TimelineDot color={item.color}>
@@ -334,7 +320,6 @@ const ReportContent = () => {
                     <TimelineConnector />
                   </TimelineSeparator>
                   
-                  {/* Cột hiển thị Nội dung chính */}
                   <TimelineContent sx={{ py: '12px', px: 2 }}>
                     <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                       <Typography variant="h6" component="span" fontWeight="bold">

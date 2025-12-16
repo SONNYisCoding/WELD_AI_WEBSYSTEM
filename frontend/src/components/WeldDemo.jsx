@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react'; // <--- [NEW] Thêm useRef
+import React, { useState, useRef } from 'react';
 import { 
   Box, Button, Card, CardContent, CardMedia, Grid, Typography, 
   CircularProgress, Alert, Paper, Modal, IconButton,
-  // <--- [NEW] Thêm các component cho Dialog chọn file
   Dialog, DialogTitle, DialogContent, List, ListItemButton, 
   ListItemAvatar, ListItemText, Avatar, Divider
 } from '@mui/material';
@@ -10,7 +9,6 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import CloseIcon from '@mui/icons-material/Close';
 
-// <--- [NEW] Thêm icon mới
 import ComputerIcon from '@mui/icons-material/Computer';
 import ImageIcon from '@mui/icons-material/Image';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -18,22 +16,16 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { createWeldJob, getWeldResult } from "../api/weldApi";
 import { API_BASE_URL } from "../config/env";
 
-// ============================================================================
-// <--- [NEW] PHẦN TỰ ĐỘNG QUÉT FILE (Chạy lúc Build/Start)
-// 1. Quét tất cả file ảnh trong src/assets/samples
-// Lưu ý: Đường dẫn '../assets' giả định file này nằm trong src/components
 const sampleModules = import.meta.glob('../assets/samples/*.{jpg,png,jpeg}', { eager: true, as: 'url' });
 
-// 2. Chuyển kết quả quét thành danh sách để hiển thị
 const AUTO_GENERATED_SAMPLES = Object.keys(sampleModules).map((path) => {
-  const fileName = path.split('/').pop(); // Lấy tên file (vd: weld_1.jpg)
+  const fileName = path.split('/').pop();
   return {
     name: fileName,
-    src: sampleModules[path], // URL của ảnh sau khi Vite xử lý
+    src: sampleModules[path],
     desc: `Sample Image: ${fileName}`
   };
 });
-// ============================================================================
 
 const WeldDemo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -44,34 +36,27 @@ const WeldDemo = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
-  // <--- [NEW] State để bật/tắt Dialog chọn nguồn ảnh
   const [selectionOpen, setSelectionOpen] = useState(false);
 
-  // <--- [NEW] Ref để điều khiển thẻ input file ẩn
   const fileInputRef = useRef(null);
 
-  // <--- [MODIFIED] Sửa hàm này để chỉ xử lý khi người dùng chọn file từ máy
   const handleLocalFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Gọi hàm xử lý chung
       processFile(file);
     }
-    // Đóng Dialog sau khi chọn xong
     setSelectionOpen(false);
   };
 
-  // <--- [NEW] Hàm xử lý khi chọn ảnh mẫu (Convert URL -> File)
   const handleSelectSample = async (sample) => {
     try {
-      setLoading(true); // Hiệu ứng chờ khi đang tải ảnh mẫu
+      setLoading(true);
       const response = await fetch(sample.src);
       const blob = await response.blob();
-      // Tạo một File object giả để tái sử dụng logic cũ
       const file = new File([blob], sample.name, { type: blob.type });
       
       processFile(file);
-      setSelectionOpen(false); // Đóng Dialog
+      setSelectionOpen(false);
     } catch (err) {
       console.error("Error loading sample:", err);
       setError("Cannot load this sample file.");
@@ -80,7 +65,6 @@ const WeldDemo = () => {
     }
   };
 
-  // <--- [NEW] Tách logic xử lý file ra thành hàm riêng để dùng chung
   const processFile = (file) => {
     setSelectedFile(file);
     setPreview(URL.createObjectURL(file));
@@ -93,9 +77,6 @@ const WeldDemo = () => {
 
     setLoading(true);
     setError("");
-
-    // const formData = new FormData(); // (Không cần dòng này ở đây vì createWeldJob tự xử lý)
-    // formData.append('file', selectedFile);
 
     try {
       const data = await createWeldJob(selectedFile);
@@ -177,22 +158,20 @@ const WeldDemo = () => {
                 Upload a weld image to run the automatic inspection process {"(YOLOv8 -> U-Net -> Tracking)"}.
               </Typography>
               
-              {/* <--- [MODIFIED] Input file bây giờ được ẩn đi và điều khiển qua ref */}
               <input
                 accept="image/*"
                 style={{ display: 'none' }}
                 id="hidden-file-input"
                 type="file"
-                ref={fileInputRef} // Gắn ref vào đây
-                onChange={handleLocalFileChange} // Gọi hàm local
+                ref={fileInputRef}
+                onChange={handleLocalFileChange}
               />
               
-              {/* <--- [MODIFIED] Button bây giờ mở Dialog thay vì mở file picker ngay */}
               <Button 
                 variant="outlined" 
                 component="span" 
                 startIcon={<CloudUploadIcon />}
-                onClick={() => setSelectionOpen(true)} // Mở Dialog
+                onClick={() => setSelectionOpen(true)}
               >
                 Select Weld Image
               </Button>
@@ -251,8 +230,6 @@ const WeldDemo = () => {
         </Box>
       </Modal>
 
-      {/* ============================================================================ */}
-      {/* <--- [NEW] DIALOG CHỌN NGUỒN ẢNH (Giao diện giả lập thư mục) */}
       <Dialog 
         open={selectionOpen} 
         onClose={() => setSelectionOpen(false)}
@@ -263,7 +240,6 @@ const WeldDemo = () => {
         <DialogContent sx={{ p: 0 }}>
           <List sx={{ pt: 0 }}>
             
-            {/* Lựa chọn 1: Upload từ máy tính (Kích hoạt thẻ input ẩn) */}
             <ListItemButton onClick={() => fileInputRef.current.click()} sx={{ py: 2 }}>
               <ListItemAvatar>
                 <Avatar sx={{ bgcolor: '#eee', color: '#666' }}>
@@ -283,7 +259,6 @@ const WeldDemo = () => {
                 </Typography>
             </Divider>
 
-            {/* Lựa chọn 2: Danh sách file tự động quét được */}
             {AUTO_GENERATED_SAMPLES.map((file) => (
               <ListItemButton key={file.name} onClick={() => handleSelectSample(file)}>
                 <ListItemAvatar>
@@ -299,7 +274,6 @@ const WeldDemo = () => {
               </ListItemButton>
             ))}
 
-            {/* Thông báo nếu không tìm thấy file nào */}
             {AUTO_GENERATED_SAMPLES.length === 0 && (
                  <Box p={2} textAlign="center" color="text.secondary">
                     No images found in src/assets/samples
@@ -309,7 +283,6 @@ const WeldDemo = () => {
           </List>
         </DialogContent>
       </Dialog>
-      {/* ============================================================================ */}
 
     </Box>
   );
